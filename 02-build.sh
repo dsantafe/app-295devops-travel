@@ -1,42 +1,51 @@
 #!/bin/bash
 
+repo="bootcamp-devops-2023"
+
+LRED='\033[1;31m'
+LGREEN='\033[1;32m'
+NC='\033[0m'
+LBLUE='\033[0;34m'
+LYELLOW='\033[1;33m'
+
 clone_repository() {
+    echo -e "\n${LYELLOW}Clonando el repositorio $repo ...${NC}"
+
     if [ ! -d "bootcamp-devops-2023" ]; then
-        git clone https://github.com/dsantafe/bootcamp-devops-2023
+        git clone -b clase2-linux-bash https://github.com/dsantafe/$repo
     else
-        cd bootcamp-devops-2023
-        git checkout clase2-linux-bash
+        cd $repo
         git pull
     fi
 }
 
 copy_application() {
-
-    # Mover al directorio donde se guardarán los archivos de configuración de Apache
-    cd /var/www/html
+    echo "====================================="
 
     # Testear la existencia del código de la aplicación
-    if [ -d "app-295devops-travel" ]; then
-        echo "El código de la aplicación existe. Realizando copia de seguridad..."
-        backup_dir="app-295devops-travel_$(date +'%Y%m%d_%H%M%S')"
-        mv app-295devops-travel "$backup_dir"
+    if [ -d "/var/www/html/$repo" ]; then
+        echo -e "\n${LGREEN}El código de la aplicación existe. Realizando copia de seguridad...${NC}"
+        backup_dir="$repo_$(date +'%Y%m%d_%H%M%S')"
+        mv app-295devops-travel "/var/www/html/$backup_dir"
     fi
 
-    # Copiar archivos de la aplicación a la carpeta web
-    sudo cp -r /app-295devops-travel /var/www/html/
+    echo -e "\n${LYELLOW}Copiando el código de la aplicación...${NC}"
+    cp -r /$repo /var/www/html/
+    echo "====================================="
 }
 
 configure_mariadb() {
-    echo "Configurando MariaDB..."
+
+    echo "====================================="
+    echo -e "\n${LBLUE}Configurando base de datos ...${NC}"
     local db_password="$1"
 
     # Configura MariaDB (crea la base de datos, el usuario y establece la contraseña)
-    mysql <<EOF
-CREATE DATABASE devopstravel;
-CREATE USER 'codeuser'@'localhost' IDENTIFIED BY '$db_password';
-GRANT ALL PRIVILEGES ON *.* TO 'codeuser'@'localhost';
-FLUSH PRIVILEGES;
-EOF
+    mysql -e "
+    CREATE DATABASE devopstravel;
+    CREATE USER 'codeuser'@'localhost' IDENTIFIED BY '$db_password';
+    GRANT ALL PRIVILEGES ON *.* TO 'codeuser'@'localhost';
+    FLUSH PRIVILEGES;"
 
     # Iniciar MariaDB
     # Habilitar el inicio automático de MariaDB en el arranque del sistema
@@ -46,31 +55,30 @@ EOF
     systemctl status mariadb
 
     # Agrega datos a la base de datos desde el archivo SQL
-    sudo mysql devopstravel </app-295devops-travel/database/devopstravel.sql
-
-    check_status $?
+    mysql < /$repo/database/devopstravel.sql
+    echo "====================================="
 }
 
 configure_php() {
 
+    echo "====================================="
+    echo -e "\n${LBLUE}Configurando el servidor web ...${NC}"
     # Mover archivos de configuración de Apache
-    sudo mv /var/www/html/index.html /var/www/html/index.html.bkp
+    mv /var/www/html/index.html /var/www/html/index.html.bkp
 
     # Ajustar la configuración de PHP para admitir archivos dinámicos
-    sudo sed -i 's/DirectoryIndex index.html/DirectoryIndex index.php index.html/' /etc/apache2/mods-enabled/dir.conf
+    sed -i 's/DirectoryIndex index.html/DirectoryIndex index.php index.html/' /etc/apache2/mods-enabled/dir.conf
 
     # Actualizar el archivo config.php con la contraseña de la base de datos
     local db_password="$1"
     sed -i "s/\$dbPassword = \".*\";/\$dbPassword = \"$db_password\";/" /var/www/html/config.php
 
     # Recargar Apache para que los cambios surtan efecto
-    sudo systemctl reload apache2
-
-    # Prueba la compatibilidad con PHP
-    echo "<?php phpinfo(); ?>" | tee /var/www/html/info.php
+    systemctl reload apache2
 
     # Verifica si PHP está funcionando correctamente
     php -v
+    echo "====================================="
 }
 
 # STAGE 2: [Build]

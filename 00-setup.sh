@@ -1,7 +1,22 @@
 #!/bin/bash
 
-# Actualizar repositorios
+repo="The-DevOps-Journey-101"
+USERID=$(id -u)
+
+LRED='\033[1;31m'
+LGREEN='\033[1;32m'
+NC='\033[0m'
+LBLUE='\033[0;34m'
+LYELLOW='\033[1;33m'
+
+if [ "${USERID}" -ne 0 ]; then
+    echo -e "\n${LRED}Correr con usuario ROOT${NC}"
+    exit
+fi 
+
+echo "====================================="
 apt-get update
+echo -e "\n${LGREEN}El Servidor se encuentra Actualizado ...${NC}"
 
 # Ejecutar la etapa 1: [Init]
 ./01-init.sh
