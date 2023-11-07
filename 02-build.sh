@@ -50,13 +50,6 @@ configure_mariadb() {
     GRANT ALL PRIVILEGES ON *.* TO 'codeuser'@'localhost';
     FLUSH PRIVILEGES;"
 
-    # Iniciar MariaDB
-    # Habilitar el inicio automático de MariaDB en el arranque del sistema
-    # Comprobar el estado de MariaDB
-    systemctl start mariadb
-    systemctl enable mariadb
-    systemctl status mariadb
-
     # Agrega datos a la base de datos desde el archivo SQL
     mysql <~/$repo/$app/database/devopstravel.sql
     echo "====================================="

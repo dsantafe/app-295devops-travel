@@ -1,28 +1,18 @@
-FROM ubuntu:22.04
-COPY setup.sh /setup.sh
-RUN chmod +x /setup.sh
-EXPOSE 80
-CMD ["/setup.sh"]
+# Commands
+```bash
+$ git clone https://github.com/dsantafe/app-295devops-travel.git
+$ chmod +x app-295devops-travel/*
+$ cd app-295devops-travel/
+$ ./00-setup.sh 
+```
 
-docker build -t my-ubuntu-image .
+## Inputs
+- Ingrese la contraseña de la base de datos:  Ex. codepass
+- Ingrese el host de la aplicación: Ex. https://789fbe39-1df1-4bc2-8d97-7d8c0295da17-10-244-9-110-80.saci.r.killercoda.com/
 
-docker run -it my-ubuntu-image
+## Ouputs
+- Puedes acceder a la aplicación en https://789fbe39-1df1-4bc2-8d97-7d8c0295da17-10-244-9-110-80.saci.r.killercoda.com/app-295devops-travel/
 
-# run with connected bash with closing after exit
-docker run -it --rm --name ubuntu ubuntu:18.04 /bin/bash
-# run in detached mode
-docker run -id --name ubuntu ubuntu:18.04
-docker exec -it ubuntu /bin/bash
-# run in detached mode with mounted directories
-docker run -v /dir-on-host:/dir-in-container -id --name ubuntu ubuntu:18.04
-docker exec -it ubuntu /bin/bash
-
-FROM ubuntu:22.04
-RUN echo 'APT::Install-Suggests "0";' >> /etc/apt/apt.conf.d/00-docker
-RUN echo 'APT::Install-Recommends "0";' >> /etc/apt/apt.conf.d/00-docker
-RUN DEBIAN_FRONTEND=noninteractive \
-  apt-get update \
-  && apt-get install -y python3 \
-  && rm -rf /var/lib/apt/lists/*
-RUN useradd -ms /bin/bash apprunner
-USER apprunner
+# Links
+- Config repo: https://github.com/dsantafe/app-295devops-travel
+- Killercoda Interactive Environments: https://killercoda.com/
