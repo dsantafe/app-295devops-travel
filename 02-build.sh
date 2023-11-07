@@ -1,7 +1,7 @@
 #!/bin/bash
 
-repo="bootcamp-devops-2023"
-app="app-295devops-travel"
+repo=""
+app=""
 
 LRED='\033[1;31m'
 LGREEN='\033[1;32m'
@@ -92,6 +92,15 @@ configure_php() {
 # Ajustar el config de php para que soporte los archivos dinamicos de php agreganfo index.php
 # Testear la compatibilidad -> ejemplo http://localhost/info.php
 # Si te muestra resultado de una pantalla informativa php , estariamos funcional para la siguiente etapa.
+
+# Verifica si se proporcionó el argumento del directorio del repositorio y de la aplicación
+if [ $# -ne 2 ]; then
+  echo "Uso: $0 <ruta_al_repositorio> <web_app>"
+  exit 1
+fi
+
+repo="$1"
+app="$2"
 
 # Solicitar al usuario la contraseña de la base de datos en tiempo de despliegue
 read -s -p "Ingrese la contraseña de la base de datos: " db_password
