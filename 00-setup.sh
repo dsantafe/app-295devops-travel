@@ -19,16 +19,21 @@ fi
 echo "====================================="
 apt-get update
 echo -e "\n${LGREEN}El Servidor se encuentra Actualizado ...${NC}"
+echo "====================================="
 
-# Ejecutar la etapa 1: [Init]
+echo "====================================="
+echo -e "\n${LBLUE}Ejecutar la etapa 1: [Init] ...${NC}"
 ./01-init.sh
+echo "====================================="
 
-# Ejecutar la etapa 2: [Build]
+echo "====================================="
+echo -e "\n${LBLUE}jecutar la etapa 2: [Build] ...${NC}"
 ./02-build.sh $repo $app
+echo "====================================="
 
-# STAGE 3: [Deploy]
-# Es momento de probar la aplicación, recuerda hacer un reload de apache y acceder a la aplicacion DevOps Travel
-# Aplicación disponible para el usuario final.
-# Accede a la aplicación
-read -s -p "Ingrese el host de la aplicación: " web_url
-./03-discord.sh ~/$repo $web_url/$app
+echo "====================================="
+echo -e "\n${LBLUE}jecutar la etapa 3: [Deploy] ...${NC}"
+read -p "Ingrese el host de la aplicación: " host_url
+# Quita la barra diagonal al final de la URL (si existe)
+./03-discord.sh ~/$repo "${host_url%/}/$app/"
+echo "====================================="

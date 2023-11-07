@@ -23,11 +23,11 @@ HTTP_STATUS=$(curl -Is "$WEB_URL" | head -n 1)
 # Verifica si la respuesta es 200 OK (puedes ajustar esto según tus necesidades)
 if [[ "$HTTP_STATUS" == *"200"* ]]; then
   # Obtén información del repositorio
-    DEPLOYMENT_INFO2="Despliegue del repositorio $REPO_NAME: "
-    DEPLOYMENT_INFO="La página web $WEB_URL está en línea."
-    COMMIT="Commit: $(git rev-parse --short HEAD)"
-    AUTHOR="Autor: $(git log -1 --pretty=format:'%an')"
-    DESCRIPTION="Descripción: $(git log -1 --pretty=format:'%s')"
+  DEPLOYMENT_INFO2="Despliegue del repositorio $REPO_NAME: "
+  DEPLOYMENT_INFO="La página web $WEB_URL está en línea."
+  COMMIT="Commit: $(git rev-parse --short HEAD)"
+  AUTHOR="Autor: $(git log -1 --pretty=format:'%an')"
+  DESCRIPTION="Descripción: $(git log -1 --pretty=format:'%s')"
 else
   DEPLOYMENT_INFO="La página web $WEB_URL no está en línea."
 fi
@@ -39,6 +39,6 @@ echo "Puedes acceder a la aplicación en $WEB_URL"
 
 # Envía el mensaje a Discord utilizando la API de Discord
 curl -X POST -H "Content-Type: application/json" \
-     -d '{
+  -d '{
        "content": "'"${MESSAGE}"'"
      }' "$DISCORD"

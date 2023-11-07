@@ -58,7 +58,7 @@ configure_mariadb() {
     systemctl status mariadb
 
     # Agrega datos a la base de datos desde el archivo SQL
-    mysql < ~/$repo/$app/database/devopstravel.sql
+    mysql <~/$repo/$app/database/devopstravel.sql
     echo "====================================="
 }
 
@@ -95,8 +95,8 @@ configure_php() {
 
 # Verifica si se proporcionó el argumento del directorio del repositorio y de la aplicación
 if [ $# -ne 2 ]; then
-  echo "Uso: $0 <ruta_al_repositorio> <web_app>"
-  exit 1
+    echo "Uso: $0 <ruta_al_repositorio> <web_app>"
+    exit 1
 fi
 
 repo="$1"
