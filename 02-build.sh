@@ -26,13 +26,13 @@ copy_application() {
 
     # Testear la existencia del código de la aplicación
     if [ -d /var/www/html/$app ]; then
-        echo -e "\n${LGREEN}El código de la aplicación existe. Realizando copia de seguridad...${NC}"
+        echo -e "\n${LGREEN}El código de la aplicación existe. Realizando copia de seguridad ...${NC}"
         backup_dir="$app_$(date +'%Y%m%d_%H%M%S')"
         mkdir /var/www/html/$backup_dir
         mv /var/www/html/$app/* /var/www/html/$backup_dir
     fi
 
-    echo -e "\n${LYELLOW}Copiando el código de la aplicación...${NC}"
+    echo -e "\n${LYELLOW}Copiando el código de la aplicación ...${NC}"
     cp -r ~/$repo/$app /var/www/html
     echo "====================================="
 }
@@ -43,15 +43,21 @@ configure_mariadb() {
     echo -e "\n${LBLUE}Configurando base de datos ...${NC}"
     local db_password="$1"
 
-    # Configura MariaDB (crea la base de datos, el usuario y establece la contraseña)
-    mysql -e "
-    CREATE DATABASE devopstravel;
-    CREATE USER 'codeuser'@'localhost' IDENTIFIED BY '$db_password';
-    GRANT ALL PRIVILEGES ON *.* TO 'codeuser'@'localhost';
-    FLUSH PRIVILEGES;"
+    # Comprobar si la base de datos ya existe
+    if mysql -e "USE devopstravel;" 2>/dev/null; then
+        echo -e "\n${LGREEN}La base de datos 'devopstravel' ya existe ...${NC}"
+    else
+        # Configura MariaDB (crea la base de datos, el usuario y establece la contraseña)
+        mysql -e "
+        CREATE DATABASE devopstravel;
+        CREATE USER 'codeuser'@'localhost' IDENTIFIED BY '$db_password';
+        GRANT ALL PRIVILEGES ON *.* TO 'codeuser'@'localhost';
+        FLUSH PRIVILEGES;"
 
-    # Agrega datos a la base de datos desde el archivo SQL
-    mysql <~/$repo/$app/database/devopstravel.sql
+        # Agrega datos a la base de datos desde el archivo SQL
+        mysql <~/$repo/$app/database/devopstravel.sql
+    fi
+
     echo "====================================="
 }
 

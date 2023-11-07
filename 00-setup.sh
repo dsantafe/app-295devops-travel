@@ -18,7 +18,7 @@ fi
 
 echo "====================================="
 apt-get update
-echo -e "\n${LGREEN}El Servidor se encuentra Actualizado ...${NC}"
+echo -e "\n${LGREEN}El servidor se encuentra Actualizado ...${NC}"
 echo "====================================="
 
 echo "====================================="
@@ -27,12 +27,12 @@ echo -e "\n${LBLUE}Ejecutar la etapa 1: [Init] ...${NC}"
 echo "====================================="
 
 echo "====================================="
-echo -e "\n${LBLUE}jecutar la etapa 2: [Build] ...${NC}"
+echo -e "\n${LBLUE}Ejecutar la etapa 2: [Build] ...${NC}"
 ./02-build.sh $repo $app
 echo "====================================="
 
 echo "====================================="
-echo -e "\n${LBLUE}jecutar la etapa 3: [Deploy] ...${NC}"
+echo -e "\n${LBLUE}Ejecutar la etapa 3: [Deploy] ...${NC}"
 read -p "Ingrese el host de la aplicación: " host_url
 # Quita la barra diagonal al final de la URL (si existe)
 ./03-discord.sh ~/$repo "${host_url%/}/$app/"

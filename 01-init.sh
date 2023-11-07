@@ -9,8 +9,9 @@ LYELLOW='\033[1;33m'
 check_status() {
   if [ $1 -eq 0 ]; then
     echo "Éxito"
+    echo -e "\n${LGREEN} Éxito ...${NC}"
   else
-    echo "Error: El comando falló. Saliendo del script."
+    echo -e "\n${LRED} Error: El comando falló. Saliendo del script ...${NC}"
     exit 1
   fi
 }
