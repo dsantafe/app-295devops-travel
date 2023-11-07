@@ -1,6 +1,7 @@
 #!/bin/bash
 
 repo="bootcamp-devops-2023"
+app="app-295devops-travel"
 
 LRED='\033[1;31m'
 LGREEN='\033[1;32m'
@@ -9,12 +10,13 @@ LBLUE='\033[0;34m'
 LYELLOW='\033[1;33m'
 
 clone_repository() {
-    echo -e "\n${LYELLOW}Clonando el repositorio $repo ...${NC}"
-
-    if [ ! -d "bootcamp-devops-2023" ]; then
+    if [ ! -d ~/$repo ]; then
+        echo -e "\n${LYELLOW}Clonando el repositorio $repo ...${NC}"
+        cd ~
         git clone -b clase2-linux-bash https://github.com/dsantafe/$repo
     else
-        cd $repo
+        echo -e "\n${LYELLOW}Actualizando el repositorio $repo ...${NC}"
+        cd ~/$repo
         git pull
     fi
 }
@@ -23,14 +25,15 @@ copy_application() {
     echo "====================================="
 
     # Testear la existencia del código de la aplicación
-    if [ -d "/var/www/html/$repo" ]; then
+    if [ -d /var/www/html/$app ]; then
         echo -e "\n${LGREEN}El código de la aplicación existe. Realizando copia de seguridad...${NC}"
-        backup_dir="$repo_$(date +'%Y%m%d_%H%M%S')"
-        mv app-295devops-travel "/var/www/html/$backup_dir"
+        backup_dir="$app_$(date +'%Y%m%d_%H%M%S')"
+        mkdir /var/www/html/$backup_dir
+        mv /var/www/html/$app/* /var/www/html/$backup_dir
     fi
 
     echo -e "\n${LYELLOW}Copiando el código de la aplicación...${NC}"
-    cp -r /$repo /var/www/html/
+    cp -r ~/$repo/$app /var/www/html
     echo "====================================="
 }
 
@@ -55,7 +58,7 @@ configure_mariadb() {
     systemctl status mariadb
 
     # Agrega datos a la base de datos desde el archivo SQL
-    mysql < /$repo/database/devopstravel.sql
+    mysql < ~/$repo/$app/database/devopstravel.sql
     echo "====================================="
 }
 
@@ -71,7 +74,7 @@ configure_php() {
 
     # Actualizar el archivo config.php con la contraseña de la base de datos
     local db_password="$1"
-    sed -i "s/\$dbPassword = \".*\";/\$dbPassword = \"$db_password\";/" /var/www/html/config.php
+    sed -i "s/\$dbPassword = \".*\";/\$dbPassword = \"$db_password\";/" /var/www/html/$app/config.php
 
     # Recargar Apache para que los cambios surtan efecto
     systemctl reload apache2
