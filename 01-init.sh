@@ -28,10 +28,11 @@ install_packages() {
       apt-get install -y $package
       check_status $?
     fi
-
-    systemctl start $package
-    systemctl enable $package
   done
+
+  # Servicios
+  systemctl enable apache2 && systemctl start apache2
+  systemctl enable mariadb && systemctl start mariadb
 }
 
 # STAGE 1: [Init]
