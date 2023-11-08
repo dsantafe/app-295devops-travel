@@ -28,12 +28,12 @@ copy_application() {
     if [ -d /var/www/html/$app ]; then
         echo -e "\n${LGREEN}El código de la aplicación existe. Realizando copia de seguridad ...${NC}"
         backup_dir="$app_$(date +'%Y%m%d_%H%M%S')"
-        mkdir /var/www/html/$backup_dir
-        mv /var/www/html/$app/* /var/www/html/$backup_dir
+        sudo mkdir /var/www/html/$backup_dir
+        sudo mv /var/www/html/$app/* /var/www/html/$backup_dir
     fi
 
     echo -e "\n${LYELLOW}Copiando el código de la aplicación ...${NC}"
-    cp -r ~/$repo/$app /var/www/html
+    sudo cp -r ~/$repo/$app /var/www/html
     echo "====================================="
 }
 
@@ -66,17 +66,17 @@ configure_php() {
     echo "====================================="
     echo -e "\n${LBLUE}Configurando el servidor web ...${NC}"
     # Mover archivos de configuración de Apache
-    mv /var/www/html/index.html /var/www/html/index.html.bkp
+    sudo mv /var/www/html/index.html /var/www/html/index.html.bkp
 
     # Ajustar la configuración de PHP para admitir archivos dinámicos
-    sed -i 's/DirectoryIndex index.html/DirectoryIndex index.php index.html/' /etc/apache2/mods-enabled/dir.conf
+    sudo sed -i 's/DirectoryIndex index.html/DirectoryIndex index.php index.html/' /etc/apache2/mods-enabled/dir.conf
 
     # Actualizar el archivo config.php con la contraseña de la base de datos
     local db_password="$1"
-    sed -i "s/\$dbPassword = \".*\";/\$dbPassword = \"$db_password\";/" /var/www/html/$app/config.php
+    sudo sed -i "s/\$dbPassword = \".*\";/\$dbPassword = \"$db_password\";/" /var/www/html/$app/config.php
 
     # Recargar Apache para que los cambios surtan efecto
-    systemctl reload apache2
+    sudo systemctl reload apache2
 
     # Verifica si PHP está funcionando correctamente
     php -v

@@ -17,7 +17,7 @@ if [ "${USERID}" -ne 0 ]; then
 fi
 
 echo "====================================="
-apt-get update
+sudo apt-get update
 echo -e "\n${LGREEN}El servidor se encuentra Actualizado ...${NC}"
 echo "====================================="
 

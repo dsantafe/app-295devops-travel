@@ -25,14 +25,14 @@ install_packages() {
       echo -e "\n${LGREEN} $package ya está instalado ...${NC}"
     else
       echo -e "\n${LYELLOW}instalando $package ...${NC}"
-      apt-get install -y $package
+      sudo apt-get install -y $package
       check_status $?
     fi
   done
 
   # Servicios
-  systemctl enable apache2 && systemctl start apache2
-  systemctl enable mariadb && systemctl start mariadb
+  sudo systemctl enable apache2 && sudo systemctl start apache2
+  sudo systemctl enable mariadb && sudo systemctl start mariadb
 }
 
 # STAGE 1: [Init]
