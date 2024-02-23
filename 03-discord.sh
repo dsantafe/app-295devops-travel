@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configura el token de acceso de tu bot de Discord
-DISCORD="https://discord.com/api/webhooks/1169002249939329156/7MOorDwzym-yBUs3gp0k5q7HyA42M5eYjfjpZgEwmAx1vVVcLgnlSh4TmtqZqCtbupov"
+DISCORD=""
 
 # Verifica si se proporcionó el argumento del directorio del repositorio y el host
 if [ $# -ne 2 ]; then
